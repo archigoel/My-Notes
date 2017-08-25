@@ -51,6 +51,8 @@ public class TabActivity extends AppCompatActivity implements AddNotesFragment.V
                 txtSpeechInput.setText(text);
                 DisplayFragment f = (DisplayFragment)adapter.instantiateItem(viewPager,1);
                 viewPager.setCurrentItem(tab.getPosition());
+//                f.listUpdated();
+                if (viewPager.getCurrentItem() == 1)
                 f.listUpdated();
                 System.out.println("TAB POSITION " + tab.getPosition());
                 System.out.println("Flag  " +flag);
@@ -58,6 +60,9 @@ public class TabActivity extends AppCompatActivity implements AddNotesFragment.V
                 if(flag == 1){
                     txtSpeechInput.setText(value);
                     flag = 0;
+                }
+                else{
+                    txtSpeechInput.setText("");
                 }
 
 

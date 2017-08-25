@@ -1,18 +1,34 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:background="@drawable/notes_background">
+    android:layout_width="250dp"
+    android:layout_height="250dp"
+    android:background="#87CEEB"
+    android:orientation="vertical"
+    android:weightSum="1">
 
     <TextView
-        android:layout_width="match_parent"
-        android:layout_height="300dp"
-        android:layout_centerInParent="true"
-        android:padding="25dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:textSize="16sp"
+        android:padding="15dp"
         android:textStyle="normal"
-        android:textColor="#3F51B5"
+        android:textColor="#000000"
         android:text="welcome"
-        android:id="@+id/view_Text"/>
+        android:id="@+id/view_Text"
+        />
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/image_view"
+        android:visibility="gone"/>
 
-</RelativeLayout>
+    <ImageView
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:src="@drawable/share"
+        android:padding="10dp"
+        android:id="@+id/shareit"
+        android:clickable="true"
+        android:layout_gravity="right|bottom" />
+
+</FrameLayout>

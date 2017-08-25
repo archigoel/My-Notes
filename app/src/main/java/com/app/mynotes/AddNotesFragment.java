@@ -1,29 +1,46 @@
 package com.app.mynotes;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.speech.RecognizerIntent;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.text.Editable;
 import android.text.Html;
 import android.text.TextWatcher;
+import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.Toast;
+
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Locale;
 
 
@@ -33,6 +50,7 @@ public class AddNotesFragment extends Fragment {
     private ImageButton btnSpeak;
     private final int REQ_CODE_SPEECH_INPUT = 100;
     static int count = 1;
+    static int img_count = 1;
     static String key;
     String text;
     private ViewInterface viewInterface;
@@ -67,7 +85,7 @@ public class AddNotesFragment extends Fragment {
             ViewInterface callback = (ViewInterface) getActivity();
             callback.onLinearLayoutCreated(view);
         } catch (ClassCastException e) {
-            Log.e("ERROR", getActivity()+" must implement ViewInterface");
+            Log.e("ERROR", getActivity() + " must implement ViewInterface");
         }
 
         btnSpeak = (ImageButton)view.findViewById(R.id.btnSpeak);
@@ -86,21 +104,23 @@ public class AddNotesFragment extends Fragment {
         });
 
 
+
+
         FloatingActionButton fab = (FloatingActionButton)view.findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
+            SharedPreferences.Editor editor = preferences.edit();
             @Override
             public void onClick(View view) {
 
                 String text = txtSpeechInput.getText().toString();
                 if (!text.equals("")) {
 
-                    SharedPreferences.Editor editor = preferences.edit();
-                    if(key != null){
+
+                    if (key != null) {
 
                         System.out.println("KEY" + key);
                         editor.putString(key, text);
-                    }
-                    else {
+                    } else {
                         editor.putString("note" + "" + count, text);
                         System.out.println("note" + "" + count);
                         System.out.println("ADD NOTE SIZE" + preferences.getAll().size());
@@ -108,7 +128,7 @@ public class AddNotesFragment extends Fragment {
                     }
 
                     editor.commit();
-                    InputMethodManager imm = (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                    InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
                     imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
 
                     Snackbar.make(view, Html.fromHtml("<font color=\"#ffff00\">Saved in My Notes</font>"), Snackbar.LENGTH_LONG)
@@ -124,6 +144,8 @@ public class AddNotesFragment extends Fragment {
 
     return view;
     }
+
+
 
     private void promptSpeechInput() {
         Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
@@ -141,6 +163,7 @@ public class AddNotesFragment extends Fragment {
         }
     }
 
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -152,22 +175,21 @@ public class AddNotesFragment extends Fragment {
                     ArrayList<String> result = data
                             .getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
                     System.out.println(result.get(0));
-//                    for(int i = 0; i < result.size();i++)
 
                     txtSpeechInput.append(result.get(0) + ".");
                     Log.e("SIZE OF result", String.valueOf(result.size()));
                 }
                 break;
             }
-
         }
     }
 
-        @Override
-        public void onPause(){
-            super.onPause();
-            System.out.println("ON PAUSE");
-        }
+    @Override
+    public void onPause(){
+        super.onPause();
+        System.out.println("ON PAUSE");
+    }
+
     @Override
     public void onResume(){
         super.onResume();
