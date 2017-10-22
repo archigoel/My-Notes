@@ -16,11 +16,6 @@
         android:text="welcome"
         android:id="@+id/view_Text"
         />
-    <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/image_view"
-        android:visibility="gone"/>
 
     <ImageView
         android:layout_width="50dp"

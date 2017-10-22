@@ -41,8 +41,6 @@ public class DisplayFragment extends Fragment {
     static int size =0;
     TextView viewText;
     ImageView share;
-    ImageView imageView;
-    private ProgressDialog pDialog;
     static List<Notes> notesList = new ArrayList<>();
 
 
@@ -62,10 +60,7 @@ public class DisplayFragment extends Fragment {
         listUpdated();
         registerForContextMenu(listView);
         notesAdapter = new NotesAdapter(getActivity(), notesList);
-
-        viewText = (TextView)dialog.findViewById(R.id.view_Text);
         share = (ImageView)dialog.findViewById(R.id.shareit);
-        imageView = (ImageView)dialog.findViewById(R.id.image_view);
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
@@ -76,23 +71,28 @@ public class DisplayFragment extends Fragment {
 
 
                 final Notes notes = notesList.get(position);
-                String key = notes.getKey();
-
-                viewText.setText(notes.getTitle());
+                final Dialog dialog = new Dialog(getActivity());
+                dialog.setContentView(R.layout.dialog_view);
+                viewText = (TextView)dialog.findViewById(R.id.view_Text);
+                share = (ImageView)dialog.findViewById(R.id.shareit);
 
 
                 share.setOnClickListener(new View.OnClickListener() {
 
                     @Override
                     public void onClick(View v) {
+
                         Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
                         sharingIntent.setType("text/plain");
                         sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "My Notes");
                         sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, notes.getTitle());
+                        Log.i("Sharing text listview", notes.getTitle());
                         startActivity(Intent.createChooser(sharingIntent, "Share via"));
 
                     }
                 });
+                viewText.setText(notes.getTitle());
+                Log.i("Display text listview", notes.getTitle());
                 dialog.show();
 
 
@@ -135,7 +135,7 @@ public class DisplayFragment extends Fragment {
         }
 
         for(int i = 0; i< notesList.size();i++)
-        System.out.println("LIST VALUES" + String.valueOf(notesList.get(i)));
+        System.out.println("LIST VALUES" + notesList.get(i));
         listView.setAdapter(notesAdapter);
 
 
@@ -159,7 +159,7 @@ public class DisplayFragment extends Fragment {
         ViewPager viewPager = (ViewPager) getActivity().findViewById(R.id.pager);
         if(item.getTitle()=="Edit") {
 
-            Notes notes = notesList.get(position);
+            final Notes notes = notesList.get(position);
             AddNotesFragment fragment = new AddNotesFragment();
             ((TabActivity) getActivity()).updateText(notes.getTitle());
             viewPager.setCurrentItem(0);
@@ -181,25 +181,23 @@ public class DisplayFragment extends Fragment {
             dialog.setContentView(R.layout.dialog_view);
             viewText = (TextView)dialog.findViewById(R.id.view_Text);
             share = (ImageView)dialog.findViewById(R.id.shareit);
-            Notes notes = notesList.get(position);
+            final Notes notes = notesList.get(position);
 
             share.setOnClickListener(new View.OnClickListener() {
 
                 @Override
                 public void onClick(View v) {
-                    Uri imageUri = Uri.parse("android.resource://" + getActivity().getPackageName() + R.drawable.share_test);
-                    Intent sendIntent = new Intent();
-                    sendIntent.setAction(Intent.ACTION_SEND);
-                    sendIntent.putExtra(Intent.EXTRA_TEXT, "This is my text to send.");
-                    sendIntent.putExtra(Intent.EXTRA_STREAM, imageUri);
-                    sendIntent.setType("image/png");
-                    sendIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-                    sendIntent.setPackage("com.whatsapp");
-                    startActivity(Intent.createChooser(sendIntent, "send"));
+                    Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
+                    sharingIntent.setType("text/plain");
+                    sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "My Notes");
+                    sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, notes.getTitle());
+                    Log.i("Sharing text ", notes.getTitle());
+                    startActivity(Intent.createChooser(sharingIntent, "Share via"));
 
                 }
             });
             viewText.setText(notes.getTitle());
+            Log.i("Display text view", notes.getTitle());
             dialog.show();
 
         }

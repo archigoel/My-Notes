@@ -61,9 +61,6 @@ public class TabActivity extends AppCompatActivity implements AddNotesFragment.V
                     txtSpeechInput.setText(value);
                     flag = 0;
                 }
-                else{
-                    txtSpeechInput.setText("");
-                }
 
 
             }
@@ -77,7 +74,7 @@ public class TabActivity extends AppCompatActivity implements AddNotesFragment.V
             @Override
             public void onTabReselected(TabLayout.Tab tab) {
 
-                System.out.println("TAB REselected");
+                System.out.println("TAB Reselected");
 
             }
         });
