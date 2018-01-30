@@ -1,8 +1,6 @@
 package com.app.mynotes;
 
-/**
- * Created by anshulgupta on 6/9/17.
- */
+
 public class Notes {
 
     public String title;
